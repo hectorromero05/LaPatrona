@@ -1,149 +1,240 @@
 import "./App.css";
 
-export default function App() {
-  const whatsapp = "https://wa.me/523330000000";
+const whatsappNumber = "523313461329";
+const whatsapp = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+  "Hola, quiero hacer un pedido en La Patrona."
+)}`;
+const mapsUrl = "https://maps.app.goo.gl/22tcZ4gyp5uf9RfK7";
+const address = "La Patrona, Guadalajara, Jalisco";
+const fallbackImage =
+  "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop";
 
+const specialties = [
+  {
+    img: "/chilaquiles.jpg",
+    title: "Chilaquiles",
+    desc: "Totopos bañados en salsa verde o roja, con frijoles refritos y un toque crujiente.",
+    price: "$70",
+  },
+  {
+    img: "/huevos.jpg",
+    title: "Huevos al gusto",
+    desc: "Preparados al momento con guarnición casera para un desayuno completo.",
+    price: "$90",
+  },
+  {
+    img: "/molletes.jpg",
+    title: "Molletes",
+    desc: "Pan dorado con frijoles, queso gratinado y opciones saladas, dulces o mixtas.",
+    price: "Desde $70",
+  },
+  {
+    img: "/americano.jpg",
+    title: "Desayuno americano",
+    desc: "Huevos, tocino, pan, café y sabores clásicos para empezar con calma.",
+    price: "$110",
+  },
+  {
+    img: "/huevos.jpg",
+    title: "Omelette",
+    desc: "Omelette suave de dos huevos con ingredientes a elegir y pan crujiente.",
+    price: "$105",
+  },
+  {
+    img: "/waffle.jpg",
+    title: "Hotcakes",
+    desc: "Pieza suave y esponjosa, perfecta con café recién hecho.",
+    price: "$24",
+  },
+  {
+    img: "/waffle.jpg",
+    title: "Waffles",
+    desc: "Crujientes por fuera, suaves por dentro y servidos con un toque dulce.",
+    price: "$30",
+  },
+  {
+    img: "/panfrances.jpg",
+    title: "Pan francés",
+    desc: "Pan brioche bañado en mezcla dulce, dorado y aromático.",
+    price: "$40",
+  },
+];
+
+const menu = [
+  {
+    category: "Desayunos",
+    items: [
+      ["Chilaquiles sencillos o divorciados", "$70"],
+      ["Huevos al gusto", "$90"],
+      ["Desayuno americano", "$110"],
+      ["Omelette", "$105"],
+    ],
+  },
+  {
+    category: "Antojos",
+    items: [
+      ["Molletes salados", "$80"],
+      ["Molletes dulces", "$70"],
+      ["Molletes mixtos", "$75"],
+    ],
+  },
+  {
+    category: "Postres",
+    items: [
+      ["Hotcake", "$24"],
+      ["Waffle", "$30"],
+      ["Pan francés", "$40"],
+    ],
+  },
+];
+
+const favorites = ["Chilaquiles", "Molletes", "Desayuno Americano", "Waffles", "Pan francés"];
+const gallery = Array.from({ length: 8 }, (_, index) => `/galeria${index + 1}.jpg`);
+
+export default function App() {
   return (
     <div className="app">
       <nav className="navbar">
-        <h2>Sabor Local</h2>
-        <div>
+        <a className="brand" href="#inicio" aria-label="La Patrona inicio">
+          <img src="/logo.png" alt="" onError={useFallbackLogo} />
+          <span>La Patrona</span>
+        </a>
+        <div className="nav-links">
+          <a href="#especialidades">Especialidades</a>
           <a href="#menu">Menú</a>
-          <a href="#galeria">Galería</a>
           <a href="#ubicacion">Ubicación</a>
-          <a href={whatsapp} target="_blank">Pedir</a>
+          <a href={whatsapp} target="_blank" rel="noreferrer">WhatsApp</a>
         </div>
       </nav>
 
-      <header className="hero">
+      <header className="hero reveal" id="inicio">
         <div className="hero-content">
-          <span>Promos disponibles hoy</span>
-          <h1>Comida deliciosa, rápida y hecha con cariño</h1>
-          <p>Platillos frescos, porciones generosas y servicio para llevar.</p>
+          <span className="eyebrow">Desayunos & brunch</span>
+          <h1>La Patrona</h1>
+          <p>Desayunos preparados al momento para comenzar el día de la mejor manera.</p>
           <div className="hero-buttons">
-            <a href={whatsapp} target="_blank">Pedir por WhatsApp</a>
-            <a href="#menu" className="secondary">Ver menú</a>
+            <a href="#menu">Ver menú</a>
+            <a href={whatsapp} target="_blank" rel="noreferrer">Pedir por WhatsApp</a>
+            <a href={mapsUrl} target="_blank" rel="noreferrer" className="secondary">Cómo llegar</a>
           </div>
         </div>
       </header>
 
-      <section className="info">
-        <div className="card">
-          <h3>📍 Ubicación</h3>
-          <p>Agrega aquí la dirección del negocio</p>
-        </div>
-        <div className="card">
-          <h3>🕒 Horario</h3>
-          <p>Lunes a domingo · 12:00 PM - 10:00 PM</p>
-        </div>
-        <div className="card">
-          <h3>📞 Contacto</h3>
-          <p>333 000 0000</p>
+      <section className="specialties section" id="especialidades">
+        <SectionTitle label="Especialidades" title="Sabores de mañana, servidos con calma" />
+        <div className="card-grid">
+          {specialties.map((item) => <FoodCard key={item.title} {...item} />)}
         </div>
       </section>
 
-      <section className="menu" id="menu">
-        <p className="section-label">Menú</p>
-        <h2>Lo favorito de la casa</h2>
-
-        <div className="menu-grid">
-          <FoodCard
-            img="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop"
-            title="Hamburguesa BBQ"
-            desc="Carne jugosa, queso, tocino, papas y bebida."
-            price="$149"
-          />
-          <FoodCard
-            img="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=800&auto=format&fit=crop"
-            title="Tacos Especiales"
-            desc="Orden de tacos con salsa de la casa."
-            price="$99"
-          />
-          <FoodCard
-            img="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?q=80&w=800&auto=format&fit=crop"
-            title="Combo Familiar"
-            desc="Ideal para compartir entre 3 o 4 personas."
-            price="$299"
-          />
+      <section className="menu-section section" id="menu">
+        <SectionTitle label="Menú" title="Una carta cálida y elegante" />
+        <div className="menu-board">
+          {menu.map((group) => (
+            <article className="menu-category reveal" key={group.category}>
+              <h3>{group.category}</h3>
+              {group.items.map(([name, price]) => (
+                <div className="menu-row" key={name}>
+                  <span>{name}</span><i></i><strong>{price}</strong>
+                </div>
+              ))}
+            </article>
+          ))}
         </div>
       </section>
 
-      <section className="gallery" id="galeria">
-        <p className="section-label">Galería</p>
-        <h2>Nuestros platillos</h2>
+      <section className="favorites section">
+        <SectionTitle label="Favoritos" title="Los más pedidos de la casa" />
+        <div className="favorite-grid">
+          {favorites.map((name, index) => (
+            <article className="favorite-card reveal" key={name}>
+              <span>0{index + 1}</span>
+              <h3>{name}</h3>
+              <p>Una elección consentida para disfrutar en familia, con café o algo dulce.</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
+      <section className="experience section">
+        <SectionTitle label="Experiencia" title="Cafetería moderna con alma familiar" />
+        <div className="experience-grid">
+          {[
+            "Ingredientes frescos",
+            "Preparado al momento",
+            "Café recién hecho",
+            "Ambiente familiar",
+          ].map((item) => <div className="experience-card reveal" key={item}>{item}</div>)}
+        </div>
+      </section>
+
+      <section className="gallery section" id="galeria">
+        <SectionTitle label="Galería" title="Momentos para antojarse" />
         <div className="gallery-grid">
-          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop" />
-          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" />
-          <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=800&auto=format&fit=crop" />
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop" />
+          {gallery.map((img, index) => (
+            <img key={img} src={img} alt={`Galería La Patrona ${index + 1}`} onError={useFallbackImage} />
+          ))}
         </div>
       </section>
 
-      <section className="reviews">
-        <p className="section-label">Opiniones</p>
-        <h2>Clientes felices</h2>
-
-        <div className="review-grid">
-          <Review text="Excelente sabor y muy buena atención." name="Juan Pérez" />
-          <Review text="La mejor hamburguesa de la zona." name="María López" />
-          <Review text="Rápido, rico y buen precio." name="Carlos Medina" />
+      <section className="location section" id="ubicacion">
+        <div className="location-copy reveal">
+          <span className="eyebrow">Ubicación</span>
+          <h2>Ven por un desayuno tranquilo</h2>
+          <p>{address}</p>
+          <a href={mapsUrl} target="_blank" rel="noreferrer">Abrir Google Maps</a>
         </div>
-      </section>
-
-      <section className="location" id="ubicacion">
-        <div>
-          <p className="section-label">Ubicación</p>
-          <h2>Ven a visitarnos</h2>
-          <p>Estamos listos para atenderte o preparar tu pedido para llevar.</p>
-          <a href="https://maps.google.com" target="_blank">Abrir en Google Maps</a>
-        </div>
-
         <iframe
-          title="Mapa"
-          src="https://www.google.com/maps?q=Guadalajara,Jalisco&output=embed"
+          title="Mapa de La Patrona"
+          src="https://www.google.com/maps?q=La%20Patrona%20Guadalajara%20Jalisco&output=embed"
           loading="lazy"
         ></iframe>
       </section>
 
-      <section className="cta">
-        <h2>¿Se te antojó?</h2>
-        <p>Haz tu pedido por WhatsApp y lo preparamos para ti.</p>
-        <a href={whatsapp} target="_blank">Ordenar ahora</a>
+      <section className="contact section" id="contacto">
+        <span className="eyebrow">Contacto</span>
+        <h2>Haz tu pedido por WhatsApp</h2>
+        <p>Teléfono: <strong>33 1346 1329</strong></p>
+        <a href={whatsapp} target="_blank" rel="noreferrer">Pedir ahora</a>
       </section>
 
       <footer>
-        <h3>Sabor Local</h3>
-        <p>Comida deliciosa, rápida y hecha con cariño.</p>
-        <p>© 2026 Sabor Local. Todos los derechos reservados.</p>
+        <h3>La Patrona</h3>
+        <p>Tel. 33 1346 1329 · {address}</p>
+        <a href={mapsUrl} target="_blank" rel="noreferrer">Google Maps</a>
       </footer>
 
-      <a className="whatsapp" href={whatsapp} target="_blank">
-        💬
-      </a>
+      <a className="whatsapp" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Pedir por WhatsApp">💬</a>
+    </div>
+  );
+}
+
+function SectionTitle({ label, title }) {
+  return (
+    <div className="section-title reveal">
+      <span className="eyebrow">{label}</span>
+      <h2>{title}</h2>
     </div>
   );
 }
 
 function FoodCard({ img, title, desc, price }) {
   return (
-    <div className="food-card">
-      <img src={img} />
+    <article className="food-card reveal">
+      <img src={img} alt={title} onError={useFallbackImage} />
       <div>
         <h3>{title}</h3>
         <p>{desc}</p>
         <span>{price}</span>
       </div>
-    </div>
+    </article>
   );
 }
 
-function Review({ text, name }) {
-  return (
-    <div className="review">
-      <div>⭐⭐⭐⭐⭐</div>
-      <p>“{text}”</p>
-      <strong>- {name}</strong>
-    </div>
-  );
+function useFallbackImage(event) {
+  event.currentTarget.src = fallbackImage;
+}
+
+function useFallbackLogo(event) {
+  event.currentTarget.style.display = "none";
 }
